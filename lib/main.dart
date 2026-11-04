@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -7,12 +6,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'UniqueKey',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const MyHomePage(),
     );
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -33,7 +33,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    tiles = [ColorWidget(), ColorWidget()];
+    tiles = [
+      ColorWidget(key: UniqueKey(), text: '1'),
+      ColorWidget(key: UniqueKey(), text: '2'),
+    ];
   }
 
   void swapTiles() {
@@ -53,26 +56,41 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.swap_horiz, size: 32),
         onPressed: swapTiles,
+        child: const Icon(Icons.swap_horiz, size: 32),
       ),
     );
   }
 }
 
 class ColorWidget extends StatelessWidget {
+  final String text;
   final Color myColor = GenerateColor.getColor();
 
-  ColorWidget({Key? key}) : super(key: key);
+  ColorWidget({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
-    return Container(height: 150, width: 150, color: myColor);
+    return Container(
+      height: 150,
+      width: 150,
+      alignment: Alignment.center,
+      color: myColor,
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 40,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 }
 
 class GenerateColor {
   static final random = Random();
+
   static Color getColor() {
     return Color.fromARGB(
       255,
